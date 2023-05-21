@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Statistika{% endblock %}
+
+{% block body %}
+    <h1>Statistička analiza podataka</h1>
+
+    <form method="POST" class="mb-4">
+        <div class="form-group">
+            <label for="tvrtka">Odaberi tvrtku:</label>
+            <select class="form-control my-3" id="tvrtka" name="tvrtka">
+                {% for tvrtka in tvrtke %}
+                    <option value="{{ tvrtka[0] }}" {% if odabrana_tvrtka == tvrtka[0] %}selected{% endif %}>{{ tvrtka[0] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Prikaži</button>
+    </form>
+    
+
+    {% if rezultati %}
+        <h2>Statistika za tvrtku: {{ odabrana_tvrtka }}</h2>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Statistika</th>
+                        <th scope="col">Vrijednost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ukupan iznos uplata</td>
+                        <td>{{ rezultati['ukupan_iznos'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Prosječan iznos uplata</td>
+                        <td>{{ rezultati['prosjecan_iznos'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Minimalni iznos uplata</td>
+                        <td>{{ rezultati['minimalni_iznos'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Maksimalni iznos uplata</td>
+                        <td>{{ rezultati['maksimalni_iznos'] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {% if graf_mjesecni %}
+    <h2>Mjesečni prikaz troškova za tvrtku: {{ odabrana_tvrtka }}</h2>
+    <img src="data:image/png;base64,{{ graf_mjesecni }}" alt="Mjesečni prikaz troškova">
+{% endif %}
+
+    {% endif %}
+{% endblock %}

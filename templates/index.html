@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block title %}Režijski Troškovi{% endblock %}
+
+{% block body %}
+    <h1>Popis režijskih troškova</h1>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Naziv firme</th>
+                <th scope="col">Iznos uplate</th>
+                <th scope="col">Broj potvrde uplate</th>
+                <th scope="col">Datum uplate</th>
+                <th scope="col">Uredi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            <tr>
+                <td>{{ payment.id }}</td>
+                <td>{{ payment.company_name }}</td>
+                <td>{{ payment.amount }}</td>
+                <td>{{ payment.payment_number }}</td>
+                <td>
+                    <span class="original-date">{{ payment.formatted_date() }}</span><br>
+                    {% if payment.edit_date %}
+                        <span class="edited-date">(Uređeno: {{ payment.edit_date.strftime('%d.%m.%Y %H:%M') }})</span>
+                    {% endif %}
+                </td>                
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPaymentModal{{ payment.id }}" data-bs-paymentid="{{ payment.id }}">Uredi</a>
+                        <form action="{{ url_for('delete', payment_id=payment.id) }}" method="post" style="display:inline;">
+                            <button class="btn btn-danger" type="submit">Briši</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="1" class="text-right">
+                    <strong>Ukupno plaćeno:</strong>
+                </td>
+                <td colspan="2" class="text-left">
+                   <strong>{{ total_amount }}</strong>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1" class="text-right">
+                    <strong>Ukupan iznos za platiti:</strong>
+                </td>
+                <td colspan="2" class="text-left">
+                    <strong><span style="color: red; font-weight: bold;">{{ total_amount_to_pay }}</span></strong>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <hr>
+
+     <!-- Add Payment Modal -->
+     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPaymentModal">Dodaj uplatu</button>
+     <div class="modal fade" id="addPaymentModal" tabindex="-1" aria-labelledby="addPaymentModalLabel" aria-hidden="true">
+         <!-- Modalni prozor za dodavanje plaćanja -->
+         <div class="modal-dialog modal-dialog-centered" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="addPaymentModalLabel">Dodaj uplatu</h5>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+                 <div class="modal-body">
+                     <form action="{{ url_for('add') }}" method="POST">
+                         <div class="form-group row">
+                             <label for="company_name" class="col-auto col-form-label">Naziv firme</label>
+                             <input type="text" class="form-control" id="company_name" name="company_name" required>
+                         </div>
+                         <div class="form-group row">
+                             <label for="amount" class="col-auto col-form-label">Iznos</label>
+                             <input type="text" class="form-control" id="amount" name="amount" required>
+                         </div>
+                         <div class="form-group row">
+                             <label for="payment_number" class="col-auto col-form-label">Broj potvrde o uplati</label>
+                             <input type="text" class="form-control" id="payment_number" name="payment_number" placeholder="Napišite 0 ako račun nije plaćen" required>
+                         </div>
+                         <div class="form-group row my-3">
+                             <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="manual_date_checkbox" onchange="toggleManualDateInput('manual_date_checkbox', 'manual_date_input_wrapper', this);">
+                                 <label class="form-check-label" for="manual_date_checkbox">
+                                     Ručni upis datuma
+                                 </label>
+                             </div>
+                         </div>
+                         <div class="form-group row" id="manual_date_input_wrapper" style="display: none;">
+                             <label for="date" class="col-auto col-form-label">Datum</label>
+                             <input type="text" class="form-control" id="date" name="date" placeholder="dd.mm.yyyy" disabled>
+                         </div>
+                         <div class="modal-footer">
+                             <button class="btn btn-outline-dark btn-lg" type="submit">Dodaj</button>
+                             <a class="btn btn-outline-danger btn-lg" href="{{ url_for('index') }}">Odustani</a>
+                         </div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+ 
+     {% for payment in payments %}
+     <!-- Edit Payment Modal for each payment -->
+     <div class="modal fade" id="editPaymentModal{{ payment.id }}" tabindex="-1" aria-labelledby="editPaymentModalLabel{{ payment.id }}" aria-hidden="true">
+         <!-- Modalni prozor za uređivanje plaćanja -->
+         <div class="modal-dialog modal-dialog-centered" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title" id="editPaymentModalLabel{{ payment.id }}">Edit Payment</h5>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+                 <div class="modal-body">
+                     <form action="{{ url_for('edit', payment_id=payment.id) }}" method="POST">
+                         <div class="form-group row">
+                             <label for="company_name" class="col-auto col-form-label">Company Name</label>
+                             <input type="text" class="form-control" id="company_name" name="company_name" value="{{ payment.company_name }}" required>
+                         </div>
+                         <div class="form-group row">
+                             <label for="amount" class="col-auto col-form-label">Amount</label>
+                             <input type="text" class="form-control" name="amount" id="amount" value="{{ payment.amount }}" required>
+                         </div>
+                         <div class="form-group row">
+                             <label for="payment_number" class="col-auto col-form-label">Payment Number</label>
+                             <input type="text" class="form-control" name="payment_number" id="payment_number" value="{{ payment.payment_number }}" required>
+                         </div>
+                         <div class="modal-footer">
+                             <button class="btn btn-outline-dark btn-lg" type="submit">Save</button>
+                             <a class="btn btn-outline-danger btn-lg" href="{{ url_for('index') }}">Cancel</a>
+                         </div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+     {% endfor %}
+
+<script>
+function toggleManualDateInput(checkboxId, inputWrapperId, checkbox) {
+    const inputWrapper = document.getElementById(inputWrapperId);
+    const dateInput = inputWrapper.querySelector('input[type="text"]');
+
+    if (checkbox.checked) {
+        inputWrapper.style.display = 'block';
+        dateInput.disabled = false;
+    } else {
+        inputWrapper.style.display = 'none';
+        dateInput.disabled = true;
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,105 @@
+:root {
+  --primary-color: #007bff; 
+  --secondary-color: #6c757d; 
+  --success-color: #28a745; 
+  --danger-color: #dc3545;
+  --warning-color: #ffc107; 
+  --info-color: #17a2b8; 
+  --light-color: #f8f9fa; 
+  --dark-color: #343a40; 
+  --text-color: #333; 
+}
+
+body {
+  background-color: var(--light-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  color: var(--primary-color);
+}
+
+.table {
+  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table thead {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.btn-primary {
+  margin-right: 5px;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-danger {
+  margin-left: 5px;
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+.modal-dialog {
+  max-width: 400px;
+}
+
+.modal-dialog-centered {
+  max-width: 400px;
+}
+
+.btn-primary[data-bs-target="#addBookModal"] {
+  margin-top: 20px;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.modal-content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modal-footer {
+  justify-content: flex-end;
+}
+
+.form-control:required {
+  border-color: var(--danger-color);
+}
+
+.error-message {
+  color: var(--danger-color);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.poravnanje {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.edited-date {
+  color: red;
+}

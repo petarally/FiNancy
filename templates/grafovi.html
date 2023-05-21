@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% block title %}Grafovi{% endblock %} {% block body
+%}
+<h1>Grafovi</h1>
+<h2 style="text-align: left">Odaberi vrstu grafa:</h2>
+<form class="poravnanje" method="POST">
+  <div class="form-group">
+    <label for="graph_type">Vrsta grafa:</label>
+    <select class="form-control my-3" id="graph_type" name="graph_type">
+      <option value="month">Graf prema mjesecima</option>
+      <option value="year">Graf prema godinama</option>
+      <option value="total">Graf ukupan prema firmama</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="chart_type">Tip grafa:</label>
+    <select class="form-control my-3" id="chart_type" name="chart_type">
+      <option value="bar">Bar Chart</option>
+      <option value="pie">Pie Chart</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Generiraj graf</button>
+</form>
+
+{% if graph_type %} {% if graph_type == 'month' %}
+<h2>Graf prema mjesecima</h2>
+<img src="data:image/png;base64,{{ month_graph }}" alt="Graf prema mjesecima" />
+{% elif graph_type == 'year' %}
+<h2>Graf prema godinama</h2>
+<img src="data:image/png;base64,{{ year_graph }}" alt="Graf prema godinama" />
+{% elif graph_type == 'total' %}
+<h2>Graf ukupan prema firmama</h2>
+<img
+  src="data:image/png;base64,{{ total_graph }}"
+  alt="Graf ukupan prema firmama"
+/>
+{% endif %} {% endif %} {% endblock %}

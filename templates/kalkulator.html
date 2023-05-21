@@ -1,0 +1,100 @@
+{% extends 'base.html' %} {% block title %}Kalkulator{% endblock %} {% block
+body %}
+
+<form action="{{ url_for('kalkulator') }}" method="POST">
+  <div class="form-group">
+    <label for="uplata_iznos">Iznos koji možete platiti:</label>
+    <input
+      type="text"
+      class="form-control my-3"
+      id="uplata_iznos"
+      name="uplata_iznos"
+      required />
+  </div>
+
+  <button type="submit" class="btn btn-primary">Prikaži</button>
+</form>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Company Name</th>
+      <th>Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for payment in unpaid_payments %}
+    <tr>
+      <td>{{ payment.company_name }}</td>
+      <td>
+        {% if payment in platiti %}
+        <span style="color: red; font-weight: bold">{{ payment.amount }}</span>
+        <a
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#paymentModal{{ payment.id }}"
+          data-bs-paymentid="{{ payment.id }}"
+          >Plati</a
+        >
+        {% else %} {{ payment.amount }} {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td><strong>Ukupan iznos za platiti:</strong></td>
+      <td><strong>{{ total_amount_to_pay }}</strong></td>
+    </tr>
+  </tbody>
+</table>
+{% if preostali_iznos %}
+<p>
+  Preostali iznos nakon provedenih plaćanja:
+  <strong style="color: red; font-weight: bold">{{ preostali_iznos }}</strong>
+</p>
+{% endif %}
+
+<!-- Dodajte ovaj kod na kraj vaše HTML stranice -->
+{% for payment in unpaid_payments %}
+<div
+  class="modal fade"
+  id="paymentModal{{ payment.id }}"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="paymentModalLabel{{ payment.id }}"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentModalLabel{{ payment.id }}">
+          Unesite broj uplate:
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form
+          action="{{ url_for('update_payment_number', payment_id=payment.id) }}"
+          method="POST">
+          <div class="form-group">
+            <label for="uplataBroj{{ payment.id }}">Broj uplate:</label>
+            <input
+              type="text"
+              class="form-control my-3"
+              id="uplataBroj{{ payment.id }}"
+              name="uplataBroj{{ payment.id }}"
+              pattern="[0-9]+"
+              required />
+            <input type="hidden" name="payment_id" value="{{ payment.id }}" />
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Potvrdi</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %} {% endblock %}
