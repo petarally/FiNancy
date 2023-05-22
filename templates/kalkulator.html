@@ -9,7 +9,8 @@ body %}
       class="form-control my-3"
       id="uplata_iznos"
       name="uplata_iznos"
-      required />
+      required
+    />
   </div>
 
   <button type="submit" class="btn btn-primary">Prikaži</button>
@@ -18,8 +19,8 @@ body %}
 <table class="table">
   <thead>
     <tr>
-      <th>Company Name</th>
-      <th>Amount</th>
+      <th>Firma</th>
+      <th>Iznos</th>
     </tr>
   </thead>
   <tbody>
@@ -61,7 +62,8 @@ body %}
   tabindex="-1"
   role="dialog"
   aria-labelledby="paymentModalLabel{{ payment.id }}"
-  aria-hidden="true">
+  aria-hidden="true"
+>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -72,12 +74,14 @@ body %}
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
-          aria-label="Close"></button>
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <form
           action="{{ url_for('update_payment_number', payment_id=payment.id) }}"
-          method="POST">
+          method="POST"
+        >
           <div class="form-group">
             <label for="uplataBroj{{ payment.id }}">Broj uplate:</label>
             <input
@@ -86,7 +90,8 @@ body %}
               id="uplataBroj{{ payment.id }}"
               name="uplataBroj{{ payment.id }}"
               pattern="[0-9]+"
-              required />
+              required
+            />
             <input type="hidden" name="payment_id" value="{{ payment.id }}" />
           </div>
           <div class="modal-footer">
