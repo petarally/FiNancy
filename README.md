@@ -16,6 +16,5 @@ Skidanje koda s GitHub-a:
 Docker tutorial:
 
     docker build -t financy .
-    docker start financy
     docker ps
     docker run -p 8080:8080 financy
