@@ -5,6 +5,12 @@ Jedan od ključnih značajki FiNancy aplikacije je vizualizacija podataka. Aplik
 Pored vizualizacije, FiNancy vam pruža i deskriptivnu statistiku dolaznih računa, pomažući vam da bolje razumijete svoje financijske obrasce. Također, aplikacija vam omogućuje praćenje promjena cijena u ovisnosti o prethodnim mjesecima, pružajući vam korisne uvide u trendove.
 FiNancy ima i jedinstvenu značajku - optimizirani kalkulator plaćanja. Ovaj kalkulator je posebno dizajniran da vam pomogne maksimizirati isplatu računa s određenim iznosom. To znači da možete iskoristiti svaku kunu na najbolji mogući način, osiguravajući da platite što veći broj računa.
 
+
+## Usecase dijagram
+
+
+
+
 ## Instalacija
 
 Skidanje koda s GitHub-a:
