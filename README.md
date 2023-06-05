@@ -8,7 +8,7 @@ FiNancy ima i jedinstvenu značajku - optimizirani kalkulator plaćanja. Ovaj ka
 
 ## Usecase dijagram
 
-
+![alt text](https://github.com/petarally/FiNancy/blob/main/FiNancy_usecase.png)
 
 
 ## Instalacija
